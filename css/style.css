@@ -1,4 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: dodgerblue;
-  color: white;
+  height: 100vh;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  width: 600px;
+  height: 600px;
+}
+
+.grid div {
+  width: calc(100% / 9);
+  height: calc(100% / 9);
+  border: 1px solid;
+}
+
+.lilypad {
+  background-color: olive;
+}
+
+.water {
+  background-color: lightsteelblue;
+}
+
+.road {
+  background-color: #333;
+}
+
+.log {
+  background-color: sienna;
+}
+
+.car {
+  background-color: yellow;
+}
+
+.frog {
+  background-color: green;
 }
