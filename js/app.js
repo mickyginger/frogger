@@ -1,7 +1,7 @@
 const width = 9
 const grid = document.querySelector('.grid')
 const cells = []
-let currentIndex = 76
+let currentIndex = width ** 2 - Math.ceil(width / 2)
 let frogsSaved = 0
 let gameIsOver = false
 
@@ -43,28 +43,24 @@ function moveFrog(dir) {
   cells[currentIndex].classList.add('frog')
 }
 
-function spawnCar() {
-  const startPoints = [53, 62, 71]
-  const lane = Math.floor(Math.random() * startPoints.length)
-  let carIndex = startPoints[lane]
+function spawnCar(startPos, speed) {
+  let carIndex = startPos
   cells[carIndex].classList.add('car')
-  const speed = 250 * (lane + 1)
 
   const carTimerId = startTimer(() => {
     cells[carIndex].classList.remove('car')
     if(carIndex % width === 0) return stopTimer(carTimerId)
     carIndex -= 1
     cells[carIndex].classList.add('car')
-  }, speed)
+  }, Math.ceil(Math.random() * 80) + speed - 80)
 }
 
-startTimer(spawnCar, 1000)
+startTimer(() => spawnCar(width * 6 - 1, 250), 1200)
+startTimer(() => spawnCar(width * 7 - 1, 400), 1500)
+startTimer(() => spawnCar(width * 8 - 1, 650), 1900)
 
-function spawnLog() {
-  const startPoints = [9, 18, 27]
-  const lane = Math.floor(Math.random() * startPoints.length)
-  let logIndices = [startPoints[lane]]
-  const speed = 250 * lane + 500
+function spawnLog(startPos, speed) {
+  let logIndices = [startPos]
 
   const logTimerId = startTimer(() => {
     logIndices.forEach(index => cells[index].classList.remove('log'))
@@ -76,7 +72,7 @@ function spawnLog() {
 
     logIndices = logIndices.map(index => index + 1)
 
-    if(logIndices.length < 2 && logIndices[0] % width < width - 1) {
+    if(logIndices.length < 3 && logIndices[0] % width < width - 1) {
       logIndices.push(logIndices[logIndices.length-1] - 1)
     }
 
@@ -86,10 +82,12 @@ function spawnLog() {
       logIndices = null
       stopTimer(logTimerId)
     }
-  }, speed)
+  }, Math.ceil(Math.random() * 80) + speed - 80)
 }
 
-startTimer(spawnLog, 1000)
+startTimer(() => spawnLog(width, 250), 1800)
+startTimer(() => spawnLog(width * 2, 400), 2300)
+startTimer(() => spawnLog(width * 3, 600), 2800)
 
 function checkCollision() {
   if(
@@ -107,7 +105,6 @@ startTimer(checkCollision, 250)
 
 document.addEventListener('keydown', (e) => {
   if(gameIsOver) return false
-  cells[currentIndex].classList.remove('frog')
 
   switch(e.keyCode) {
     case 37:
